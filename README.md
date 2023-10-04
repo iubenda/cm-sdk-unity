@@ -72,6 +72,80 @@ The Consent Management Platform (CMP) Unity Plugin allows you to easily integrat
 - iOS (via DllImport)
 - Android (via JNI)
 
+## API Documentation
+
+### `Initialize`
+Initializes the Consent Manager with the provided domain, code ID, app name, and language.
+- **Parameters**:
+  - `domain`: The domain of the Consent Management Platform.
+  - `codeId`: The code ID for the application.
+  - `appName`: The name of the application.
+  - `language`: The language code (e.g., "EN", "DE") for localization.
+
+### `SetAndroidCallbacks`
+Sets Android-specific callbacks for CMP events.
+
+### `SetIOSCallbacks`
+Sets iOS-specific callbacks for CMP events.
+
+### `HasConsent`
+Checks if the user has given consent.
+- **Returns**: `true` if user has given consent, `false` otherwise.
+
+### `OpenConsentLayer`
+Opens the Consent Layer to manage user's consent settings.
+
+### `OpenConsentLayerOnCheck`
+Opens the Consent Layer if necessary based on checks.
+
+### `HasVendor`
+Checks if a vendor with the specified ID has been selected by the user.
+- **Parameters**:
+  - `id`: The ID of the vendor to check.
+- **Returns**: `true` if the vendor is selected, `false` otherwise.
+
+### `HasPurpose`
+Checks if a purpose with the specified ID has been selected by the user.
+- **Parameters**:
+  - `id`: The ID of the purpose to check.
+- **Returns**: `true` if the purpose is selected, `false` otherwise.
+
+### `GetAllPurposes`
+Gets a list of all available purposes.
+- **Returns**: A list of purpose IDs.
+
+### `GetEnabledPurposes`
+Gets a list of enabled purposes.
+- **Returns**: A list of enabled purpose IDs.
+
+### `GetDisabledPurposes`
+Gets a list of disabled purposes.
+- **Returns**: A list of disabled purpose IDs.
+
+### `GetAllVendors`
+Gets a list of all available vendors.
+- **Returns**: A list of vendor IDs.
+
+### `GetEnabledVendors`
+Gets a list of enabled vendors.
+- **Returns**: A list of enabled vendor IDs.
+
+### `GetDisabledVendors`
+Gets a list of disabled vendors.
+- **Returns**: A list of disabled vendor IDs.
+
+### `ExportCmpString`
+Exports the Consent Management Platform (CMP) settings as a string.
+- **Returns**: The exported CMP settings as a string.
+
+### `GetGoogleAcString`
+Gets the Google Advertiser Consent string.
+- **Returns**: The Google Advertiser Consent string.
+
+### `GetUsPrivacyString`
+Gets the US Privacy string.
+- **Returns**: The US Privacy string.
+
 ## Support
 
 For bug reports, feature requests, or general inquiries, please [open an issue](https://support.iubenda.com/support/homer) on the repository.
