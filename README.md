@@ -19,41 +19,6 @@ The Consent Management Platform (CMP) Unity Plugin allows you to easily integrat
 
 2. **Preparation**: In order to use the Unity SDK please follow these steps.
 
-  ***Android***
-
-  -For Android we need to add the Jitpack Repository to the settings.gradle:
-
-Please add
-
-```javascript
-maven { url "https://jitpack.io" }
-```
-
-in the settingsTemplate.gradle
-
-```gradle
-pluginManagement {
-    repositories {
-
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
-include ':launcher', ':unityLibrary'
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-        flatDir {
-            dirs "${project(':unityLibrary').projectDir}/libs"
-        }
-    }
-}
-```
-
 ***iOS***
 
 - For iOS you just to be sure that the `CmpSdk.xcframework` is added accordingly to the unity Project.
@@ -106,44 +71,6 @@ dependencyResolutionManagement {
 - Unity 20XX.X.X or later
 - iOS (via DllImport)
 - Android (via JNI)
-
-
-## Android
-
-Please add
-
-```
-        maven { url "https://jitpack.io" }
-```
-
-in settings.gradle
-
-```
-pluginManagement {
-    repositories {
-
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
-
-include ':launcher', ':unityLibrary'
-
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-        flatDir {
-            dirs "${project(':unityLibrary').projectDir}/libs"
-        }
-    }
-}
-
-```
 
 ## Support
 
