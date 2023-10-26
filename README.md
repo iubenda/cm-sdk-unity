@@ -61,6 +61,60 @@ The Consent Management Platform (CMP) Unity Plugin allows you to easily integrat
 - iOS (via DllImport)
 - Android (via JNI)
 
+## iOS
+
+### Using iOS Callbacks in Unity with CmpSdk
+
+#### Import Namespaces
+```csharp
+using UnityEngine;
+using AOT;
+using CmpSdk.Callbacks;
+```
+
+#### Implement Callback Functions
+Decorate your static callback methods with the `[MonoPInvokeCallback]` attribute to define the callback type.
+
+```csharp
+        [MonoPInvokeCallback(typeof(CmpOpenListenerBlock))]
+        public static void OnWebViewOpenedStatic()
+        {
+            Debug.Log("CMPConsentTool opened");
+        }
+
+        [MonoPInvokeCallback(typeof(CmpCloseListenerBlock))]
+        public static void DefaultCloseListener()
+        {
+            Debug.Log("DefaultCloseListener called");
+        }
+
+        [MonoPInvokeCallback(typeof(CmpNotOpenListenerBlock))]
+        public static void DefaultNotOpenListener()
+        {
+            Debug.Log("DefaultNotOpenListener called");
+        }
+
+        [MonoPInvokeCallback(typeof(CmpErrorListenerBlock))]
+        public static void DefaultErrorListener(CmpErrorType type, string message)
+        {
+            Debug.Log($"DefaultErrorListener called. ErrorType: {type}, Message: {message}");
+        }
+
+        [MonoPInvokeCallback(typeof(CmpButtonEventListenerBlock))]
+        public static void DefaultCmpButtonClickedListener(CmpButtonEvent type)
+        {
+            Debug.Log($"DefaultCmpButtonClicked called. Type: {type}");
+        }
+```
+
+#### Set Up Callbacks
+Use the `SetIOSCallbacks` method from CmpSdk to link your static methods to native callbacks.
+
+```csharp
+_cmpManager.SetIOSCallbacks(OnWebViewOpenedStatic, DefaultCloseListener, DefaultNotOpenListener, DefaultErrorListener, DefaultCmpButtonClickedListener);
+```
+
+This will bind your Unity static methods to the native iOS callbacks, allowing seamless communication between Unity and native code.
 
 ## Android
 
@@ -89,6 +143,31 @@ To ensure compatibility with custom layout fragments, it is imperative to integr
      ```
 
 By adhering to one of the aforementioned procedures, you can ensure that your Unity plugin remains compatible with custom layout fragments on Android.
+
+### Setting Up Android Callbacks in Unity with CmpSdk
+
+#### Implement Callback Interfaces
+First, implement the required callback interfaces for Android in your Unity MonoBehaviour class.
+
+```csharp
+public class CmpSampleScript : MonoBehaviour, IOnOpenCallback, IOnCloseCallback, IOnCmpNotOpenedCallback, IOnCmpButtonClickedCallback, IOnErrorCallback,IOncCmpImportProcessed
+{
+    public void onWebViewOpened() { /*...*/ }
+    public void onWebViewClosed() { /*...*/ }
+    public void onCMPNotOpened() { /*...*/ }
+    public void onButtonClicked(CmpButtonEvent buttonEvent) { /*...*/ }
+    public void errorOccurred(CmpErrorType errorType, string message) { /*...*/ }
+}
+```
+
+#### Set Callbacks
+Finally, use the `SetAndroidCallbacks` method to register your callback implementations with the CmpSdk manager.
+
+```csharp
+_cmpManager.SetAndroidCallbacks(this, this, this, this, this);
+```
+
+Your MonoBehaviour class methods will be invoked when the corresponding events are triggered in the native Android code.
 
 ## Troubleshooting
 
