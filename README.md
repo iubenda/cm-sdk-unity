@@ -169,6 +169,16 @@ _cmpManager.SetAndroidCallbacks(this, this, this, this, this);
 
 Your MonoBehaviour class methods will be invoked when the corresponding events are triggered in the native Android code.
 
+## API Callback Documentation
+
+| Callback Event Name        | Description                                                               | Usage                                                      |
+| -------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **OnOpenCallback**         | Listener for the event when the CMP is opened.                             | Use this callback to listen for when the CMP opens.         |
+| **OnCloseCallback**        | Listener for the event when the CMP is closed.                             | Use this callback to listen for when the CMP is closed.     |
+| **OnCmpNotOpenedCallback** | Listener for the event when CMP doesn't need to be opened.                 | Handle scenarios where the CMP doesn't need to be displayed.|
+| **OnErrorCallback**        | Listener will be called if an error occurs.                                | Handle errors, like network issues or UI problems.          |
+| **OnCmpButtonClickedCallback** | Listener for the event when a button is clicked in CMP.                  | Know when a user interacts with the CMP by clicking a button.|
+
 ## Troubleshooting
 
 ### Advanced Changes: Editing AppCompat Style
