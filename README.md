@@ -37,7 +37,7 @@ The Consent Management Platform (CMP) Unity Plugin allows you to easily integrat
     - **Callbacks**: Set callback listeners for various events:
 
       ```csharp
-      CmpManager.Instance.SetIOSCallbacks(openListener, closeListener, cmpNotOpenedCallback, onErrorCallback, onCmpButtonClickedCallback);
+      CmpManager.Instance.AddEventListeners(openListener, closeListener, cmpNotOpenedCallback, onErrorCallback, onCmpButtonClickedCallback);
       ```
 
     - **Purpose and Vendor Checks**: Check for consent related to specific purposes and vendors:
@@ -61,123 +61,16 @@ The Consent Management Platform (CMP) Unity Plugin allows you to easily integrat
 - iOS (via DllImport)
 - Android (via JNI)
 
-## iOS
+## CmpSdk Plugin Window
 
-### Using iOS Callbacks in Unity with CmpSdk
+### Quick Guide
 
-#### Import Namespaces
-```csharp
-using UnityEngine;
-using AOT;
-using CmpSdk.Callbacks;
-```
+- **Access**: `Window` > `CmpSdk` > `CmpSdk Build Script Settings` in Unity Editor.
+- **iOS Build Script**: Toggle to enable/disable automatic integration for iOS.
+- **Android Build Script**: Toggle to enable/disable automatic integration for Android.
+- **Custom Layout Integration (Android)**: Enable to use custom layouts for Android (available when Android Build Script is enabled).
 
-#### Implement Callback Functions
-Decorate your static callback methods with the `[MonoPInvokeCallback]` attribute to define the callback type.
-
-```csharp
-        [MonoPInvokeCallback(typeof(CmpOpenListenerBlock))]
-        public static void OnWebViewOpenedStatic()
-        {
-            Debug.Log("CMPConsentTool opened");
-        }
-
-        [MonoPInvokeCallback(typeof(CmpCloseListenerBlock))]
-        public static void DefaultCloseListener()
-        {
-            Debug.Log("DefaultCloseListener called");
-        }
-
-        [MonoPInvokeCallback(typeof(CmpNotOpenListenerBlock))]
-        public static void DefaultNotOpenListener()
-        {
-            Debug.Log("DefaultNotOpenListener called");
-        }
-
-        [MonoPInvokeCallback(typeof(CmpErrorListenerBlock))]
-        public static void DefaultErrorListener(CmpErrorType type, string message)
-        {
-            Debug.Log($"DefaultErrorListener called. ErrorType: {type}, Message: {message}");
-        }
-
-        [MonoPInvokeCallback(typeof(CmpButtonEventListenerBlock))]
-        public static void DefaultCmpButtonClickedListener(CmpButtonEvent type)
-        {
-            Debug.Log($"DefaultCmpButtonClicked called. Type: {type}");
-        }
-```
-
-#### Set Up Callbacks
-Use the `SetIOSCallbacks` method from CmpSdk to link your static methods to native callbacks.
-
-```csharp
-_cmpManager.SetIOSCallbacks(OnWebViewOpenedStatic, DefaultCloseListener, DefaultNotOpenListener, DefaultErrorListener, DefaultCmpButtonClickedListener);
-```
-
-This will bind your Unity static methods to the native iOS callbacks, allowing seamless communication between Unity and native code.
-
-## Android
-
-To ensure compatibility with custom layout fragments, it is imperative to integrate an external dependency. This can be accomplished through two distinct methods:
-
-1. **Manual Addition to maintemplate.gradle**:
-
-   If you choose to handle dependencies manually, you must add the required library to your custom `maintemplate.gradle`. This process provides you with greater control over the versions and configurations.
-
-   Please add the AppCompat Dependency to your Android mainTemplate.gradle file:
-   ```
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-   ```
-2. **Utilization of External Dependency Manager**:
-
-   For a more streamlined approach, the External Dependency Manager for Unity (EDM4U) can be used. If you've opted for this method:
-
-   - Navigate to the `CmpSdkDependencies.xml` file located in your Unity project.
-   - You'll find the necessary dependencies commented out for your convenience. Simply uncomment the relevant lines of code to activate them:
-     ```xml
-     <dependencies>
-         <androidPackage>
-             <dependency name="androidx.appcompat:appcompat:1.3.1" />
-         </androidPackage>
-     </dependencies>
-     ```
-
-By adhering to one of the aforementioned procedures, you can ensure that your Unity plugin remains compatible with custom layout fragments on Android.
-
-### Setting Up Android Callbacks in Unity with CmpSdk
-
-#### Implement Callback Interfaces
-First, implement the required callback interfaces for Android in your Unity MonoBehaviour class.
-
-```csharp
-public class CmpSampleScript : MonoBehaviour, IOnOpenCallback, IOnCloseCallback, IOnCmpNotOpenedCallback, IOnCmpButtonClickedCallback, IOnErrorCallback,IOncCmpImportProcessed
-{
-    public void onWebViewOpened() { /*...*/ }
-    public void onWebViewClosed() { /*...*/ }
-    public void onCMPNotOpened() { /*...*/ }
-    public void onButtonClicked(CmpButtonEvent buttonEvent) { /*...*/ }
-    public void errorOccurred(CmpErrorType errorType, string message) { /*...*/ }
-}
-```
-
-#### Set Callbacks
-Finally, use the `SetAndroidCallbacks` method to register your callback implementations with the CmpSdk manager.
-
-```csharp
-_cmpManager.SetAndroidCallbacks(this, this, this, this, this);
-```
-
-Your MonoBehaviour class methods will be invoked when the corresponding events are triggered in the native Android code.
-
-## API Callback Documentation
-
-| Callback Event Name        | Description                                                               | Usage                                                      |
-| -------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| **OnOpenCallback**         | Listener for the event when the CMP is opened.                             | Use this callback to listen for when the CMP opens.         |
-| **OnCloseCallback**        | Listener for the event when the CMP is closed.                             | Use this callback to listen for when the CMP is closed.     |
-| **OnCmpNotOpenedCallback** | Listener for the event when CMP doesn't need to be opened.                 | Handle scenarios where the CMP doesn't need to be displayed.|
-| **OnErrorCallback**        | Listener will be called if an error occurs.                                | Handle errors, like network issues or UI problems.          |
-| **OnCmpButtonClickedCallback** | Listener for the event when a button is clicked in CMP.                  | Know when a user interacts with the CMP by clicking a button.|
+---
 
 ## Troubleshooting
 
@@ -185,31 +78,34 @@ Your MonoBehaviour class methods will be invoked when the corresponding events a
 
 If there's a need to make more intricate modifications, such as editing the AppCompat style, you have the flexibility to do so directly within the plugin's codebase.
 
-#### Modifying AppCompat Style in `GradlePostProcessor.cs`
+#### Modifying AppCompat Style Customization
 
-The specific values for the AppCompat style are housed in the `GradlePostProcessor.cs` class. To modify them:
+To customize the AppCompat style more effectively, utilize the newly added `themes.xml` file in your Android build. This approach replaces the previous method of modifying style values in the `GradlePostProcessor.cs` class.
 
-1. Navigate to the `UpdateThemeAppCompatInAndroidManifestFile` function within the `GradlePostProcessor.cs` file.
-2. Locate the following lines of code that define the theme styles:
-   ```csharp
-   var oldValue = @"android:theme=""@style/UnityThemeSelector""";
-   var newValue = @"android:theme=""@style/Theme.AppCompat.DayNight""";
+#### Steps for Customization
+
+1. **Locate the Themes File**:
+   - The `themes.xml` file is situated at the following path in your Android build:
+     ```
+     res/values/themes.xml
+     ```
+
+2. **Edit the AppCompat Style**:
+   - Open the `themes.xml` file.
+   - Here, you can directly modify the style attributes to tailor the AppCompat theme to your needs.
+---
 
 ### Disabling AppCompatActivity in `UnityPlayerActivity`
 
 If your project doesn't utilize a custom layout and you prefer not to add the `AppCompatActivity` to the `UnityPlayerActivity`, there's an option to disable the relevant post-build steps in the Gradle processor.
+This will prevent the plugin from updating the `UnityPlayerActivity` and the AppCompat theme.
+You can disable these steps by following the steps below:
 
-#### Steps to Disable:
-
-1. Navigate to the `OnPostGenerateGradleAndroidProject` function within your processor script.
-2. You'll find the post-build steps for updating the `UnityPlayerActivity` and the AppCompat theme. To disable these steps, simply comment out the corresponding lines of code:
-   ```csharp
-   // UpdateUnityPlayerActivity(path);
-   // UpdateThemeAppCompatInAndroidManifestFile(path);
+- **Access**: `Window` > `CmpSdk` > `CmpSdk Build Script Settings` in Unity Editor, uncheck the "Integrate custom layout" options.
 
 ## Support
 
-For bug reports, feature requests, or general inquiries, please [open an issue](https://support.iubenda.com/support/homer) on the repository.
+For bug reports, feature requests, or general inquiries, please [open an issue](https://support.iubenda.com/support/home) on the repository.
 
 ## License
 
