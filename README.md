@@ -10,4 +10,4 @@ The Consent Management Platform (CMP) Unity Plugin allows you to easily integrat
 
 ## Documentation
 
-For detailed API documentation and usage examples, refer to the [official documentation](https://help.consentmanager.net).
+For detailed API documentation and usage examples, clicke the link to the [official documentation]([https://help.consentmanager.net](https://help.consentmanager.net/books/cmp/page/unity-1-consentmanager-sdk-integration)https://help.consentmanager.net/books/cmp/page/unity-1-consentmanager-sdk-integration).
