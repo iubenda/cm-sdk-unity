@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## Version 1.0.0 (Released on 2024-03-04)
+
+### Breaking Changes
+- The layouting is now predefined and it's not necessary to define the UI Consent layer by pixels if custom layouts are desired
+- UIConfig Class is added with UI configurations
+
+### Added
+- ATTracking support
+- Google Consent Mode V2 Support
+- Integration of predefined custom layouts.
+
+
 ## Version 0.99.0 (Released on 2023-12-18)
 
 ### Breaking Changes
